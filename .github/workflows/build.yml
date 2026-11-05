@@ -19,10 +19,18 @@ jobs:
         with:
           channel: 'stable'
 
-      - run: flutter pub get
-      - run: flutter build web --release
+      - name: Configure Flutter Web support
+        run: |
+          flutter config --enable-web
+          flutter create . --platforms=web
 
-      - name: Deploy to gh-pages branch
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Web
+        run: flutter build web --release --base-href "/Toto-runners/"
+
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
